@@ -244,13 +244,10 @@ class AuditLogger:
     def _matching_files(
         self, agent_id: str | None, date_str: str | None
     ) -> list[Path]:
-        pattern = "audit_"
-        if agent_id:
-            pattern += agent_id.replace("/", "_") + "_"
-        if date_str:
-            pattern += date_str
-        pattern += "*.jsonl" if not date_str else ".jsonl"
-
+        # Files are named: audit_{agent_id}_{YYYYMMDD}.jsonl
+        agent_part = agent_id.replace("/", "_") + "_" if agent_id else "*_"
+        date_part  = date_str if date_str else "*"
+        pattern = f"audit_{agent_part}{date_part}.jsonl"
         return sorted(self._log_dir.glob(pattern))
 
 

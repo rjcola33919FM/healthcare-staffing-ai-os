@@ -262,6 +262,7 @@ class EscalationRepository:
         ticket = EscalationTicket(**kwargs)
         self.session.add(ticket)
         await self.session.flush()
+        await self.session.refresh(ticket)
         logger.info(
             "[DB] Escalation ticket created id=%s contact=%s severity=%s",
             ticket.id, ticket.contact_id, ticket.severity,
