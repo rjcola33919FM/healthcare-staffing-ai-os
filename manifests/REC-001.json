@@ -1,0 +1,40 @@
+{
+  "id": "REC-001",
+  "name": "Candidate Recruiting Agent",
+  "version": "1.0.0",
+  "industry": "Healthcare staffing and medical recruiting",
+  "status": "build-ready",
+  "owner": "GoHighLevel implementation team",
+  "primary_role": "Candidate intake, FAQ handling, appointment booking, CRM field updates",
+  "domain": "Healthcare candidate recruiting",
+  "kb_scope": "Candidate intake forms, approved FAQ library, recruiter availability rules, pipeline stage transitions, compensation escalation thresholds, disqualification criteria requiring human review",
+  "inputs": [
+    "CRM contact data",
+    "candidate/client messages",
+    "forms",
+    "calendar events",
+    "document checklist status"
+  ],
+  "outputs": [
+    "CRM notes",
+    "pipeline updates",
+    "tasks",
+    "SMS/email replies",
+    "calendar events",
+    "human escalation tickets"
+  ],
+  "tools": [
+    "GoHighLevel SMS",
+    "AI voice",
+    "forms",
+    "calendar booking",
+    "pipeline stage updates"
+  ],
+  "human_review": "Required for compensation negotiations, final screening decisions, and candidate disqualification.",
+  "guardrails": [
+    "No legal/clinical advice",
+    "No final credential approval",
+    "No PHI unless HIPAA-compliant configuration is confirmed",
+    "Human approval for exceptions"
+  ]
+}

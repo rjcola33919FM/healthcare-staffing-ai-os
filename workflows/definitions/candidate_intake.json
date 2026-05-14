@@ -1,0 +1,53 @@
+{
+  "workflow_id": "WF-CANDIDATE-INTAKE-001",
+  "name": "Candidate Intake Pipeline",
+  "version": "1.0.0",
+  "trigger": "new_contact_created",
+  "agent": "REC-001",
+  "steps": [
+    {
+      "step": 1,
+      "name": "initial_sms",
+      "action": "send_sms",
+      "message": "Hi! Thanks for your interest in healthcare staffing opportunities. I'm here to help get you started. What's your clinical specialty?",
+      "channel": "sms"
+    },
+    {
+      "step": 2,
+      "name": "collect_intake_fields",
+      "action": "collect_fields",
+      "required_fields": ["first_name", "last_name", "specialty", "license_state", "phone"],
+      "max_turns": 10,
+      "timeout_hours": 48
+    },
+    {
+      "step": 3,
+      "name": "book_recruiter_appointment",
+      "action": "book_appointment",
+      "appointment_type": "recruiter_intro",
+      "agent": "SCHED-001"
+    },
+    {
+      "step": 4,
+      "name": "update_pipeline",
+      "action": "stage_change",
+      "agent": "CRM-001",
+      "to_stage": "intake_complete",
+      "tags_add": ["intake_complete"],
+      "tags_remove": ["intake_in_progress"]
+    },
+    {
+      "step": 5,
+      "name": "trigger_credentialing",
+      "action": "route",
+      "to_agent": "CRED-001",
+      "event_type": "document_request",
+      "categories": ["identity", "licensure", "background_drug"]
+    }
+  ],
+  "escalation": {
+    "triggers": ["compensation", "disqualification", "screening_decision"],
+    "route_to": "HUMAN",
+    "tag": "human_escalation_required"
+  }
+}

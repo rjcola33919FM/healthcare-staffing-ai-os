@@ -1,0 +1,40 @@
+{
+  "id": "COMP-001",
+  "name": "Compliance Monitoring Agent",
+  "version": "1.0.0",
+  "industry": "Healthcare staffing and medical recruiting",
+  "status": "build-ready",
+  "owner": "GoHighLevel implementation team",
+  "primary_role": "Detect missing/expiring requirements, create alerts, preserve audit trails, escalate compliance exceptions",
+  "domain": "Healthcare regulatory compliance",
+  "kb_scope": "Mandatory credential requirements by role and state, expiration windows, audit trail standards, PHI exposure triggers, adverse compliance flag definitions, regulatory reporting thresholds",
+  "inputs": [
+    "CRM contact data",
+    "candidate/client messages",
+    "forms",
+    "calendar events",
+    "document checklist status"
+  ],
+  "outputs": [
+    "CRM notes",
+    "pipeline updates",
+    "tasks",
+    "SMS/email replies",
+    "calendar events",
+    "human escalation tickets"
+  ],
+  "tools": [
+    "GoHighLevel tasks",
+    "alerts",
+    "pipeline movement",
+    "compliance tags",
+    "reporting dashboard"
+  ],
+  "human_review": "Required for adverse compliance flags, missing mandatory credentials, PHI exposure, and audit exceptions.",
+  "guardrails": [
+    "No legal/clinical advice",
+    "No final credential approval",
+    "No PHI unless HIPAA-compliant configuration is confirmed",
+    "Human approval for exceptions"
+  ]
+}

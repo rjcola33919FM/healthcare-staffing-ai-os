@@ -1,0 +1,41 @@
+{
+  "id": "ORCH-001",
+  "name": "Healthcare Staffing Orchestrator Agent",
+  "version": "1.0.0",
+  "industry": "Healthcare staffing and medical recruiting",
+  "status": "build-ready",
+  "owner": "GoHighLevel implementation team",
+  "primary_role": "Master orchestrator — routes inbound events to specialized agents, enforces escalation rules, maintains CRM state",
+  "domain": "Healthcare staffing operations",
+  "kb_scope": "GoHighLevel CRM workflows, escalation thresholds, HIPAA-compliant data routing, pipeline stage logic, agent dispatch rules, human-in-the-loop triggers",
+  "inputs": [
+    "CRM contact data",
+    "candidate/client messages",
+    "forms",
+    "calendar events",
+    "document checklist status"
+  ],
+  "outputs": [
+    "CRM notes",
+    "pipeline updates",
+    "tasks",
+    "SMS/email replies",
+    "calendar events",
+    "human escalation tickets"
+  ],
+  "tools": [
+    "GoHighLevel workflows",
+    "calendar",
+    "tags",
+    "pipeline",
+    "task creation",
+    "webhook router"
+  ],
+  "human_review": "Required for compliance exceptions, credential approval, candidate rejection, and client contract decisions.",
+  "guardrails": [
+    "No legal/clinical advice",
+    "No final credential approval",
+    "No PHI unless HIPAA-compliant configuration is confirmed",
+    "Human approval for exceptions"
+  ]
+}

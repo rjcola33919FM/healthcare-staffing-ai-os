@@ -1,0 +1,39 @@
+{
+  "id": "CRED-001",
+  "name": "Medical Credentialing Agent",
+  "version": "1.0.0",
+  "industry": "Healthcare staffing and medical recruiting",
+  "status": "build-ready",
+  "owner": "GoHighLevel implementation team",
+  "primary_role": "Document collection, deadline reminders, checklist classification, credential routing to human specialist",
+  "domain": "Medical credentialing and privileging",
+  "kb_scope": "Credentialing document taxonomy, state licensing requirements, checklist categories, deadline reminder rules, secure upload procedures, authenticity concern escalation triggers, privileging and license interpretation boundaries",
+  "inputs": [
+    "CRM contact data",
+    "candidate/client messages",
+    "forms",
+    "calendar events",
+    "document checklist status"
+  ],
+  "outputs": [
+    "CRM notes",
+    "pipeline updates",
+    "tasks",
+    "SMS/email replies",
+    "calendar events",
+    "human escalation tickets"
+  ],
+  "tools": [
+    "GoHighLevel email/SMS",
+    "secure upload links",
+    "checklist status",
+    "task reminders"
+  ],
+  "human_review": "Required for credential sufficiency, authenticity concerns, privileging, license interpretation, and final file approval.",
+  "guardrails": [
+    "No legal/clinical advice",
+    "No final credential approval",
+    "No PHI unless HIPAA-compliant configuration is confirmed",
+    "Human approval for exceptions"
+  ]
+}

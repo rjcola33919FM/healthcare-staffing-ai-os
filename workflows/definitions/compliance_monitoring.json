@@ -1,0 +1,73 @@
+{
+  "workflow_id": "WF-COMPLIANCE-MONITOR-001",
+  "name": "Compliance Monitoring Workflow",
+  "version": "1.0.0",
+  "trigger": "scheduled:daily_08:00_UTC",
+  "agent": "COMP-001",
+  "steps": [
+    {
+      "step": 1,
+      "name": "daily_expiry_scan",
+      "action": "run_expiry_scan",
+      "scope": "all_active_candidates",
+      "alert_thresholds": {
+        "red": 0,
+        "yellow": 30
+      }
+    },
+    {
+      "step": 2,
+      "name": "missing_mandatory_check",
+      "action": "check_missing_mandatory",
+      "categories": ["identity", "licensure", "background_drug"],
+      "on_missing": "red_alert_and_escalate"
+    },
+    {
+      "step": 3,
+      "name": "apply_compliance_tags",
+      "action": "tag_update",
+      "agent": "CRM-001",
+      "tag_map": {
+        "compliant": "compliant",
+        "at_risk": "at_risk",
+        "non_compliant": "non_compliant"
+      }
+    },
+    {
+      "step": 4,
+      "name": "generate_dashboard_report",
+      "action": "compliance_report",
+      "output": "monitoring_dashboard"
+    }
+  ],
+  "event_triggers": [
+    {
+      "event": "pipeline_stage_change",
+      "stages": ["credentialing", "credentialing_complete", "placed"],
+      "action": "run_missing_mandatory_check"
+    },
+    {
+      "event": "crm_note_write",
+      "action": "phi_exposure_scan"
+    },
+    {
+      "event": "document_received",
+      "action": "adverse_flag_check"
+    }
+  ],
+  "escalation": {
+    "triggers": [
+      "adverse_compliance_flag",
+      "missing_mandatory_credential",
+      "phi_exposure",
+      "audit_exception"
+    ],
+    "route_to": "HUMAN",
+    "severity": "critical"
+  },
+  "audit": {
+    "immutable": true,
+    "retention_days": 2555,
+    "log_every_state_change": true
+  }
+}
