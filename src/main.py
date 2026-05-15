@@ -23,7 +23,7 @@ from src.agents.compliance import ComplianceAgent
 from src.agents.sales import SalesAgent
 from src.agents.crm import CRMAgent
 from src.queue.redis_queue import enqueue_event, get_queue
-from src.monitoring.langfuse_client import trace_event
+from monitoring.langfuse_client import trace_event
 from rag import RAGPipeline
 from memory import MemoryManager
 from context import ContextInjector
