@@ -20,8 +20,22 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-# Audit log directory — override via AUDIT_LOG_DIR env var
-_DEFAULT_LOG_DIR = Path(os.environ.get("AUDIT_LOG_DIR", "logs/audit"))
+# Audit log directory — override via AUDIT_LOG_DIR env var.
+# On read-only filesystems (Vercel) fall back to /tmp which is always writable.
+def _default_log_dir() -> Path:
+    configured = os.environ.get("AUDIT_LOG_DIR", "")
+    if configured:
+        return Path(configured)
+    candidate = Path("logs/audit")
+    try:
+        candidate.mkdir(parents=True, exist_ok=True)
+        return candidate
+    except OSError:
+        fallback = Path("/tmp/logs/audit")
+        fallback.mkdir(parents=True, exist_ok=True)
+        return fallback
+
+_DEFAULT_LOG_DIR = _default_log_dir()
 
 # Each agent writes to its own daily log file: audit_AGENT_YYYYMMDD.jsonl
 _LOG_FORMAT_VERSION = "1.0"

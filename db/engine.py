@@ -8,6 +8,7 @@ from __future__ import annotations
 import logging
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -24,8 +25,13 @@ def _db_url() -> str:
     if url:
         # asyncpg requires postgresql+asyncpg:// scheme
         return url.replace("postgresql://", "postgresql+asyncpg://", 1)
-    # No DB configured (Vercel / local dev) — use SQLite file-based fallback
-    return "sqlite+aiosqlite:///./staffing.db"
+    # No DB configured — use SQLite fallback. Use /tmp on read-only filesystems (Vercel).
+    db_path = Path("./staffing.db")
+    try:
+        db_path.touch()
+    except OSError:
+        db_path = Path("/tmp/staffing.db")
+    return f"sqlite+aiosqlite:///{db_path}"
 
 
 _engine = None
