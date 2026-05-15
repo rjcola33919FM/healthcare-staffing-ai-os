@@ -19,17 +19,13 @@ logger = logging.getLogger(__name__)
 
 # Build from env or settings
 def _db_url() -> str:
-    """Prefer DATABASE_URL env var; fall back to component parts."""
+    """Prefer DATABASE_URL env var; fall back to SQLite for serverless/dev."""
     url = os.environ.get("DATABASE_URL", "")
     if url:
         # asyncpg requires postgresql+asyncpg:// scheme
         return url.replace("postgresql://", "postgresql+asyncpg://", 1)
-    user     = os.environ.get("POSTGRES_USER", "staffing_user")
-    password = os.environ.get("POSTGRES_PASSWORD", "")
-    host     = os.environ.get("POSTGRES_HOST", "localhost")
-    port     = os.environ.get("POSTGRES_PORT", "5432")
-    dbname   = os.environ.get("POSTGRES_DB", "healthcare_staffing")
-    return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{dbname}"
+    # No DB configured (Vercel / local dev) — use SQLite file-based fallback
+    return "sqlite+aiosqlite:///./staffing.db"
 
 
 _engine = None
@@ -40,14 +36,14 @@ def get_engine():
     global _engine
     if _engine is None:
         url = _db_url()
-        _engine = create_async_engine(
-            url,
-            pool_size=10,
-            max_overflow=20,
-            pool_pre_ping=True,
-            echo=os.environ.get("SQL_ECHO", "false").lower() == "true",
-        )
-        logger.info("[DB] Engine created: %s", url.split("@")[-1])  # hide credentials
+        is_sqlite = url.startswith("sqlite")
+        kwargs: dict = {"echo": os.environ.get("SQL_ECHO", "false").lower() == "true"}
+        if is_sqlite:
+            kwargs["poolclass"] = NullPool
+        else:
+            kwargs.update({"pool_size": 10, "max_overflow": 20, "pool_pre_ping": True})
+        _engine = create_async_engine(url, **kwargs)
+        logger.info("[DB] Engine created: %s", url.split("@")[-1])
     return _engine
 
 

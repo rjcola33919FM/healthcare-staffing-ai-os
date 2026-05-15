@@ -50,7 +50,10 @@ _workflow_executor: WorkflowExecutor | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _agents, _orchestrator, _context_injector, _workflow_executor
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        logger.warning("[STARTUP] ANTHROPIC_API_KEY not set — agents will not function.")
+    client = anthropic.Anthropic(api_key=api_key or "placeholder")
     _orchestrator = OrchestratorAgent(client)
     _agents = {
         "REC-001": RecruitingAgent(client),
