@@ -127,6 +127,17 @@ class VAPIVoicePayload(BaseModel):
 
 # ── Health ─────────────────────────────────────────────────────────────────────
 
+@app.get("/")
+async def root():
+    return {
+        "name": "Healthcare Staffing AI OS",
+        "version": "1.0.0",
+        "status": "online",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
+
 @app.get("/health")
 async def health():
     return {
